@@ -1,20 +1,26 @@
-# Tiramisu
+# General
 
+We here deposit R and Python scripts to analyze a pile of crop pest and disease monitoring data
+by using two statistical and seven machine learning methods.
 
-```bash
-PROJECT_PATH=~/projects/tiramisu
-```
-
-
+### Statistical methods:
+    Bayes model and multiple linear regression model
+### Machine Learning:
+    random forest, decision tree, kNN, SVM, neural network, elastic-net regression and ridge regression
 
 # Dataset
 
-Download Kishi's dataset, decompress ZIP and put all csv files into
+Monitoring datasets we used are depoosited at the site below.
+URL: XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+You can freely download all the files.
+
+After you download the zipped dataset, put all the decompressed csv files into
 `data/formatted_data/random` and `data/formatted_data/shuffle` directories.
 The script `format_data.classic.py` was used for randomizing and shuffling dataset
 by myself, but Kishi's dataset (send210725) has already randomized and shffuled,
 therefore we do not need run this script any more.
 
+# Files
 
 ```bash
 cd ${PROJECT_PATH}
