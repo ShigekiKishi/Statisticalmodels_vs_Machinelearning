@@ -1,19 +1,19 @@
-### ƒVƒ“ƒvƒ‹d‰ñ‹A‚·‚éRƒXƒNƒŠƒvƒg
+### ã‚·ãƒ³ãƒ—ãƒ«é‡å›å¸°ã™ã‚‹Rã‚¹ã‚¯ãƒªãƒ—ãƒˆ
 
 library(tidyverse)
 library(magrittr)
 library(MASS)
 library(Metrics)
 #library(furrr)
-#plan(multiprocess) # for ƒXƒpƒRƒ“—p
+#plan(multiprocess) # for ã‚¹ãƒ‘ã‚³ãƒ³ç”¨
 library(rsample)
 # install.packages("glmnet)
 library(glmnet) #repos = "https://cran.ism.ac.jp/")
-## •’Ê‚Íplan(multisession) or plan(multicore)
+## æ™®é€šã¯plan(multisession) or plan(multicore)
 
-# ƒf[ƒ^‚Ì“Ç‚İ‚İ
+# ãƒ‡ãƒ¼ã‚¿ã®èª­ã¿è¾¼ã¿
 # Data
-# process_files.R‚©‚ç“n‚³‚ê‚é‚Ì‚Ífile_name ("~~.csv")
+# process_files.Rã‹ã‚‰æ¸¡ã•ã‚Œã‚‹ã®ã¯file_name ("~~.csv")
 
 ## glm
 
@@ -24,16 +24,16 @@ factor_name <- c("Month", "longi", "lati", "airtemp", "precip")
 # 2-fold cross validation to choice explanatory variables -----------------
 ##/////////////////////////////////////////////////////////
 
-calc_2cv <- function(train_d){ ## ŠÖ”‰»
+calc_2cv <- function(train_d){ ## é–¢æ•°åŒ–
 
-  # 2•ªŠ„
+  # 2åˆ†å‰²
   spl_2dats <- train_d %>% rsample::vfold_cv(v=2)
   train_d1 <- analysis(spl_2dats$splits[[1]])
   train_d2 <- analysis(spl_2dats$splits[[2]])
 
   #train_dat %>% head()
 
-  # train_d1‚Ætrain_d2‚Ìs”‚ğ‚»‚ë‚¦‚é
+  # train_d1ã¨train_d2ã®è¡Œæ•°ã‚’ãã‚ãˆã‚‹
   if(nrow(train_d1) != nrow(train_d2)){
     if(nrow(train_d1) > nrow(train_d2)){
       train_d1 <- train_d1[1:nrow(train_d2),]
@@ -53,11 +53,11 @@ calc_2cv <- function(train_d){ ## ŠÖ”‰»
   rmse_m <- mean(c(rmse1, rmse2))
   # factor 0 or 1
   term_factor <- c(0,0,0,0,0)
-  # Ï‚İd‚Ë‚é
+  # ç©ã¿é‡ã­ã‚‹
   rmse_table <- rbind(rmse_table, c(term_factor, rmse_m)) 
   
   ## more than 0 factors
-  for(i in 1:5){ ## glmnet‚Íà–¾•Ï”‚ª2ˆÈã
+  for(i in 1:5){ ## glmnetã¯èª¬æ˜å¤‰æ•°ãŒ2ä»¥ä¸Š
     factor_mat <- combn(factor_name, i)
     
     for(j in 1:ncol(factor_mat)){
@@ -92,7 +92,7 @@ calc_2cv <- function(train_d){ ## ŠÖ”‰»
       rmse_m <- mean(c(rmse1, rmse2))
       # factor 0 or 1
       term_factor <- ifelse(match(factor_name, glm_factors) %>% is.na(), 0, 1)
-      # Ï‚İd‚Ë‚é
+      # ç©ã¿é‡ã­ã‚‹
       rmse_table <- rbind(rmse_table, c(term_factor, rmse_m))
       
     }
@@ -108,14 +108,14 @@ calc_2cv <- function(train_d){ ## ŠÖ”‰»
 
 
 ##OK
-#‚±‚±‚Å‘I‚Î‚ê‚½•Ï”‚ğ‚Â‚©‚Á‚ÄŒŸØƒf[ƒ^‚ÅRMSE‚ğ‹‚ß‚éB
+#ã“ã“ã§é¸ã°ã‚ŒãŸå¤‰æ•°ã‚’ã¤ã‹ã£ã¦æ¤œè¨¼ãƒ‡ãƒ¼ã‚¿ã§RMSEã‚’æ±‚ã‚ã‚‹ã€‚
 RMSE_calc <- function(train_d, valid_d){
   # choice parameters
   params <- calc_2cv(train_d)
   use_factors <- params[1:5]
 
   valid_dat <- valid_d
-  glm_factors <- factor_name[ifelse(use_factors==1, TRUE, FALSE)] # à–¾•Ï”‚ÌƒxƒNƒ^[
+  glm_factors <- factor_name[ifelse(use_factors==1, TRUE, FALSE)] # èª¬æ˜å¤‰æ•°ã®ãƒ™ã‚¯ã‚¿ãƒ¼
 
   if(length(glm_factors) == 0){ 
     res <- glm(newY~1, data=train_d)
@@ -161,7 +161,7 @@ calc_10cv <- function(x, y){ # x:train_list, y: valid_list
     newx %<>% as.data.frame()
     return(newx)
   })
-  ## strawberry(-Season)‚É‚à‘Î‰‚Å‚«‚é‚æ‚¤
+  ## strawberry(-Season)ã«ã‚‚å¯¾å¿œã§ãã‚‹ã‚ˆã†
   rmse_null <-  mapply(RMSE_calc, train_nlist, valid_nlist)
   
   # calculating z score
@@ -181,7 +181,7 @@ files <- list.files(path="./dat_files/")
 z_table <- NULL
 for (i in 1:length(files)){
   file_name <- files[i]
-  # “Ç‚İ‚İ
+  # èª­ã¿è¾¼ã¿
   dat <- read.csv(paste0("dat_files/", file_name), header=T, row.names = 1) %>% 
     as.data.frame() %>% na.omit()
   dat <- dat %>% mutate(id = 1:nrow(dat))
@@ -190,7 +190,7 @@ for (i in 1:length(files)){
   
   if(pref_num > 1 && nrow(dat) > 10){ ## more than 1 pref and more than 15 records
     
-    # –ÊÏƒf[ƒ^‚È‚çÍ”|–ÊÏ‚ÌŠ„‡newY‚É•Ï‚¦‚éB–ÊÏƒf[ƒ^‚Å‚È‚¢‚È‚ç‚»‚Ì‚Ü‚Ü—^‚¦‚é
+    # é¢ç©ãƒ‡ãƒ¼ã‚¿ãªã‚‰æ ½åŸ¹é¢ç©ã®å‰²åˆnewYã«å¤‰ãˆã‚‹ã€‚é¢ç©ãƒ‡ãƒ¼ã‚¿ã§ãªã„ãªã‚‰ãã®ã¾ã¾ä¸ãˆã‚‹
     if (str_detect(file_name, "menseki")){
       dat <- dat %>%  mutate(newY = incidence/Area) # ratio
     }else{
@@ -198,12 +198,12 @@ for (i in 1:length(files)){
     }
     
     set.seed(100)
-    # ‚Ü‚¸‚ÍƒVƒƒƒbƒtƒ‹
+    # ã¾ãšã¯ã‚·ãƒ£ãƒƒãƒ•ãƒ«
     dat_normal <- dat %>% sample_frac(size=1)
-    # Ÿ‚É10•ªŠ„
+    # æ¬¡ã«10åˆ†å‰²
     spl_dat <- dat_normal %>% rsample::vfold_cv(v=10)
-    #analysis(spl_dat$splits[[1]]) # ŠwKƒf[ƒ^‚ğ•\¦‚·‚é
-    #assessment(spl_dat$splits[[1]]) # validationƒf[ƒ^‚ğ•\¦‚·‚é
+    #analysis(spl_dat$splits[[1]]) # å­¦ç¿’ãƒ‡ãƒ¼ã‚¿ã‚’è¡¨ç¤ºã™ã‚‹
+    #assessment(spl_dat$splits[[1]]) # validationãƒ‡ãƒ¼ã‚¿ã‚’è¡¨ç¤ºã™ã‚‹
     
     train_list <- apply(spl_dat, 1, function(x)analysis(x$splits))
     #train_list[[1]] %>% dim() # 657 rows
@@ -220,6 +220,6 @@ for (i in 1:length(files)){
   
 }## end for 203 files
 
-## •Û‘¶
+## ä¿å­˜
 write.csv(z_table, file="est_files/z_table.csv")
 
