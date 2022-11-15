@@ -1,16 +1,24 @@
 # General
 
-We here deposit R and Python scripts to analyze a pile of crop pest and disease monitoring data
+We here deposit R and Python scripts to analyze a pile of monitoring datasets 
+that monthly recorded incidences of crop pests and diseases for decades
 by using two statistical and seven machine learning methods.
 
-### Statistical methods:
-    Bayes model and multiple linear regression model
-### Machine Learning:
-    random forest, decision tree, kNN, SVM, neural network, elastic-net regression and ridge regression
+### Statistical methods (R)
+    1. Bayes model (Stan)
+    2. multiple linear regression
+### Machine Learning (Python)
+    3. random forest
+    4. decision tree
+    5. kNN
+    6. SVM
+    7. neural network
+    8. elastic-net regression
+    9. ridge regression
 
 # Dataset
 
-Monitoring datasets we used are depoosited at the site below.
+Datasets we used are depoosited at the site below.
 URL: XXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 You can freely download all the files.
 
@@ -20,7 +28,7 @@ The script `format_data.classic.py` was used for randomizing and shuffling datas
 by myself, but Kishi's dataset (send210725) has already randomized and shffuled,
 therefore we do not need run this script any more.
 
-# Files
+# Files (for machine learning methods)
 
 ```bash
 cd ${PROJECT_PATH}
@@ -30,7 +38,7 @@ cd formatted_data
 mkdir random
 mkdir shuffle
 
-# move all csv files in Kishi's dataset into random and shuffle directories
+# move all csv files in the dataset into random and shuffle directories
 
 mkdir -p random4dnn
 for fpath in `ls random`
@@ -47,10 +55,17 @@ do
 done
 ```
 
-
-
-
 # Modeling
+
+## Bayes model
+
+State-space Bayes models are estimated by a MCMC algorithm, Stan on R.
+Modelling and standardization processes for a single dataset is performed by "bayes_calc.R",
+"process_fies_bayes.R" sequentially calls and processes each dataset with "bayes_calc.R".
+
+## Multiple linear regression
+
+Multiple linear regression models for each dataset are estimated by a single R file, "LM_model.R"
 
 ## Classic machine learning models
 
